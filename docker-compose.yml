@@ -1,0 +1,33 @@
+version: '3.8'
+
+services:
+  db:
+    image: postgres:15
+    container_name: fintech_ledger_db
+    restart: always
+    environment:
+      POSTGRES_DB: fintech_ledger
+      POSTGRES_USER: anike
+      POSTGRES_PASSWORD: password123
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+
+  api:
+    build: .
+    container_name: fintech_ledger_api
+    restart: always
+    ports:
+      - "8000:8000"
+    environment:
+      DB_HOST: db
+      DB_NAME: fintech_ledger
+      DB_USER: anike
+      DB_PASSWORD: password123
+      DB_PORT: 5432
+    depends_on:
+      - db
+
+volumes:
+  postgres_data:
